@@ -25,8 +25,8 @@ try
     do shell script "/usr/bin/swift " & homePath & "sidecar_toggle.swift"
 end try
 ```
-3. File → Export → File Format: Application
-4. Name it something like "Sidecar Toggle" so you can find it easily in Spotlight, then save it to your Dock or Desktop
+3. File → Export → File Format: **Application**, name it "Sidecar Toggle" so you can find it in Spotlight
+4. Save somewhere you can find it. Run it from spotlight or drop it onto you desktop or dock.
    
 ## Requirements
 
