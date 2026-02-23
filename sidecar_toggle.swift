@@ -14,8 +14,16 @@ let isConnected = connectedDevices.contains(where: {
 })
 
 let sema = DispatchSemaphore(value: 0)
-let closure: @convention(block) (AnyObject?, AnyObject?) -> Void = { _, _ in sema.signal() }
-let blockObject = unsafeBitCast(closure, to: AnyObject.self)
+
+var closure: AnyObject?
+// init closure with signature dependeing on mac version to avoid segfaulting on tahoe.
+if #available(macOS 26, *) {
+    // update closure signature for macOS 26 (tested on 26.2)
+    closure = ({ sema.signal() } as @convention(block) () -> Void) as AnyObject
+} else {
+    closure = ({ _, _ in sema.signal() } as @convention(block) (AnyObject?, AnyObject?) -> Void) as AnyObject
+}
+// don't need unsafeBitCast as we have already casted closure to common AnyObject.
 
 if isConnected {
     manager.perform(Selector(("disconnectFromDevice:completion:")), with: ipad, with: blockObject)
